@@ -34,6 +34,8 @@ gem 'spring',        group: :development
 
 gem "twitter-bootstrap-rails"
 
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw]
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
