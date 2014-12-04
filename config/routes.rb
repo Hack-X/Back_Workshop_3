@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   resources :shows
 
+  match '*any' => 'application#options', :via => [:options]
+
   get 'home/index'
 
   root 'home#index'
