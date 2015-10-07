@@ -281,7 +281,7 @@ Ajoutons ces lignes à la fin du fichier `db/seeds.rb` :
 ```
   Show.create(
     name: "Mon premier Show",
-    location: "Salle Pleyel",
+    venue: "Salle Pleyel",
     description: "Concert blabla",
     capacity: 500,
     price: 30,
@@ -291,7 +291,7 @@ Ajoutons ces lignes à la fin du fichier `db/seeds.rb` :
 
   Show.create(
     name: "Sébastien Tellier",
-    location: "Nouveau Casino",
+    venue: "Nouveau Casino",
     description: "L'Aventura",
     capacity: 500,
     price: 36,
