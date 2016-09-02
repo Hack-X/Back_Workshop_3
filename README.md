@@ -358,4 +358,36 @@ On va donc effectuer la commande : `heroku run rake db:create db:migrate db:seed
 
 Et là, magie, notre application est en ligne et l'API fonctionne !
 
+#### Etape 5 : Activation du Cross-Domain
 
+Par défaut, une API Rails est sécurisée contre les requêtes "cross-domain", c'est à dire les requêtes qui viennent d'une URL autre que la nôtre. Nous allons donc devoir rajouter à notre controller `shows_controller.rb`, nous allons forcer l'autorisation en ajoutant des headers avant et après chaque requête.
+
+* A la fin de notre controller, dans la partie private nous allons ajouter 2 méthodes :
+
+```
+    def cors_set_access_control_headers
+      headers['Access-Control-Allow-Origin'] = '*'
+      headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
+      headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization, Token'
+      headers['Access-Control-Max-Age'] = "1728000"
+    end
+
+    def cors_preflight_check
+      if request.method == 'OPTIONS'
+        headers['Access-Control-Allow-Origin'] = '*'
+        headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
+        headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version, Token'
+        headers['Access-Control-Max-Age'] = '1728000'
+
+        render :text => '', :content_type => 'text/plain'
+      end
+    end
+``` 
+
+* Au début de notre controller, nous allons ajouter 2 filtres : 
+```
+  before_filter :cors_preflight_check
+  after_filter :cors_set_access_control_headers
+``` 
+
+* Et comme d'habitude, on va finir par faire un commit !
