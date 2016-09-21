@@ -358,36 +358,21 @@ On va donc effectuer la commande : `heroku run rake db:create db:migrate db:seed
 
 Et là, magie, notre application est en ligne et l'API fonctionne !
 
-#### Etape 5 : Activation du Cross-Domain
+### Partie 3 : Activation du Cross-Domain
 
-Par défaut, une API Rails est sécurisée contre les requêtes "cross-domain", c'est à dire les requêtes qui viennent d'une URL autre que la nôtre. Nous allons donc devoir rajouter à notre controller `shows_controller.rb`, nous allons forcer l'autorisation en ajoutant des headers avant et après chaque requête.
+Par défaut, une API Rails est sécurisée contre les requêtes "cross-domain", c'est à dire les requêtes qui viennent d'une URL autre que la nôtre. Nous allons donc rajouter une petit gem pour ajouter les headers nécessaires à chaque requête.
 
-* A la fin de notre controller, dans la partie private nous allons ajouter 2 méthodes :
+* Dans le fichier `Gemfile`, on va ajouter dans les gems `gem 'rack-cors', :require => 'rack/cors'` 
+* Ensuite, dans notre terminal, on va exécuter la commande `bundle install` pour installer cette gem.
+* Enfin, dans le fichier `config/application.rb`, on va jouter ces lignes au milieu : 
 
 ```
-    def cors_set_access_control_headers
-      headers['Access-Control-Allow-Origin'] = '*'
-      headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
-      headers['Access-Control-Allow-Headers'] = 'Origin, Content-Type, Accept, Authorization, Token'
-      headers['Access-Control-Max-Age'] = "1728000"
-    end
-
-    def cors_preflight_check
-      if request.method == 'OPTIONS'
-        headers['Access-Control-Allow-Origin'] = '*'
-        headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
-        headers['Access-Control-Allow-Headers'] = 'X-Requested-With, X-Prototype-Version, Token'
-        headers['Access-Control-Max-Age'] = '1728000'
-
-        render :text => '', :content_type => 'text/plain'
+    config.middleware.insert_before 0, "Rack::Cors" do
+      allow do
+        origins '*'
+        resource '*', :headers => :any, :methods => [:get, :post, :options]
       end
     end
-``` 
-
-* Au début de notre controller, nous allons ajouter 2 filtres : 
 ```
-  before_filter :cors_preflight_check
-  after_filter :cors_set_access_control_headers
-``` 
 
 * Et comme d'habitude, on va finir par faire un commit !
