@@ -354,9 +354,11 @@ A ce moment là, on peut aller visiter l'URL donnée [http://api-shows-tonight.h
 
 Par contre, la page Shows affiche une erreur à ce moment là : en effet, la base de donnée n'a pas encore créée, ni migrée et remplie.
 
-On va donc effectuer la commande : `heroku run rake db:create db:migrate db:seed` qui correspond à la commande rake qu'on aurait effectué sur notre machine précédée de heroku run pour l'effectuer en ligne. Si cette commande est bloquée à l'X, on peut lancer la commande `heroku run:detached rake db:create db:migrate db:seed` qui est équivalente à part que la tâche s'execute en background.
+On va donc effectuer la commande : `heroku run rake db:migrate db:seed` qui correspond à la commande rake qu'on aurait effectué sur notre machine précédée de heroku run pour l'effectuer en ligne. Si cette commande est bloquée à l'X, on peut lancer la commande `heroku run:detached rake db:migrate db:seed` qui est équivalente à part que la tâche s'execute en background.
 
 Et là, magie, notre application est en ligne et l'API fonctionne !
+
+nb : en fonction de la version d'Heroku / de Rails, vous pouvez avoir besoin de créer la base de données en exécutant `heroku run rake db:migrate db:seed`.
 
 ### Partie 3 : Activation du Cross-Domain
 
